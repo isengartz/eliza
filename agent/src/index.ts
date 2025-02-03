@@ -71,6 +71,7 @@ import { binancePlugin } from "@elizaos/plugin-binance";
 import { birdeyePlugin } from "@elizaos/plugin-birdeye";
 import { bittensorPlugin } from "@elizaos/plugin-bittensor";
 import { bnbPlugin } from "@elizaos/plugin-bnb";
+import { devSchoolPlugin } from "@elizaos/plugin-devschool";
 import {
     advancedTradePlugin,
     coinbaseCommercePlugin,
@@ -1016,6 +1017,7 @@ export async function createAgent(
         character,
         // character.plugins are handled when clients are added
         plugins: [
+            devSchoolPlugin,
             parseBooleanFromText(getSecret(character, "BITMIND")) &&
             getSecret(character, "BITMIND_API_TOKEN")
                 ? bittensorPlugin
