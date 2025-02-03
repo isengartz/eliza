@@ -1,10 +1,13 @@
-import type {
-    ActionExample,
-    IAgentRuntime,
-    Memory,
-    Action,
-    HandlerCallback,
-    State,
+import {
+    type ActionExample,
+    type IAgentRuntime,
+    type Memory,
+    type Action,
+    type HandlerCallback,
+    type State,
+    type Content,
+    generateText,
+    ModelClass,
 } from "@elizaos/core";
 
 
@@ -33,7 +36,25 @@ export const currentNewsAction: Action = {
         _callback: HandlerCallback
     ): Promise<boolean> => {
 
-        const news = await getCurrentNews("javascript");
+        const context = `Extract the users search term from the {{username}} message. The message is: ${_message.content.text}
+        Only respond with the search term, do not include any other text.`
+
+        const searchTerm = await generateText({runtime: _runtime, context, modelClass: ModelClass.SMALL, stop: ["\n"]})
+
+
+        const news = await getCurrentNews(searchTerm);
+
+        const memory : Memory = {
+            userId: _message.userId,
+            agentId: _message.agentId,
+            roomId: _message.roomId,
+            content: {
+                text: news,
+                action: "CURRENT_NEWS",
+                source: _message.content.source,
+            } as Content,
+        }
+        await _runtime.messageManager.createMemory(memory);
 
         _callback({ text: news });
 
