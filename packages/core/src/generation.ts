@@ -369,6 +369,10 @@ export async function generateText({
 
     elizaLogger.log("Generating text...");
 
+    console.log("*** CONTEXT ***");
+    console.log(context);
+    console.log("*** CONTEXT ***");
+
     elizaLogger.info("Generating text with options:", {
         modelProvider: runtime.modelProvider,
         model: modelClass,
@@ -1643,7 +1647,9 @@ export const generateImage = async (
 }> => {
     const modelSettings = getImageModelSettings(runtime.imageModelProvider);
     if (!modelSettings) {
-        elizaLogger.warn("No model settings found for the image model provider.");
+        elizaLogger.warn(
+            "No model settings found for the image model provider."
+        );
         return { success: false, error: "No model settings available" };
     }
     const model = modelSettings.name;
